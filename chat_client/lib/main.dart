@@ -1,4 +1,4 @@
-import 'package:chat_client/views/widgets/home.dart';
+import 'package:chat_client/views/home/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {

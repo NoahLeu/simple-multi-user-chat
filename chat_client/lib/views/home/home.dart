@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:chat_client/views/widgets/message_display.dart';
-import 'package:chat_client/views/widgets/message_form.dart';
+import 'package:chat_client/views/home/widgets/message_display.dart';
+import 'package:chat_client/views/home/widgets/message_form.dart';
 import 'package:chat_client/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:chat_client/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     messages = fetchMessages();
-  }  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +29,25 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.chat),
-            SizedBox(width: 8),
-            Text('Chat Client App'),
+          children: [
+            const Icon(Icons.chat),
+            const SizedBox(width: 8),
+            const Text('Chat Client App'),
+            Container(
+              margin: const EdgeInsets.only(left: 40),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -73,10 +89,12 @@ class _HomePageState extends State<HomePage> {
 }
 
 Future<List<Message>> fetchMessages() async {
-  final response = await http.get(Uri.parse('http://localhost:4000/api/messages'));
+  final response =
+      await http.get(Uri.parse('http://localhost:4000/api/messages'));
 
   if (response.statusCode == 200) {
-    return (jsonDecode(response.body) as Map<String, dynamic>)['data']['messages']
+    return (jsonDecode(response.body) as Map<String, dynamic>)['data']
+            ['messages']
         .map<Message>((message) => Message.fromJson(message))
         .toList();
   } else {
