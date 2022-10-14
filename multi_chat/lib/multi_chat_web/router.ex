@@ -35,7 +35,6 @@ defmodule MultiChatWeb.Router do
     post "/messages", MessageController, :create
   end
 
-
   # Other scopes may use custom stacks.
   # scope "/api", MultiChatWeb do
   #   pipe_through :api
