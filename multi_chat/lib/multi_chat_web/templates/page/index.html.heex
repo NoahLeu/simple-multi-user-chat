@@ -1,0 +1,49 @@
+<section class="w-full bg-blue-50 min-h-screen flex-col flex justify-center items-center">
+  <div class="page-container py-10 text-gray-800 px-6">
+    <h1 class="text-4xl font-bold mb-4">Custom Chat</h1>
+    <div id="chat-window" class="w-full bg-white h-96 overflow-y-scroll rounded-lg p-3 flex flex-col items-start justify-start">
+      <!-- Chat goes here -->
+      <%= for message <- @messages do %>
+        <button
+          phx-click="delete_msg"
+          phx-value-msg_id={message.message_id}
+          class={"relative flex-col text-left mb-1.5 max-w-sm " <> if message.user_id == @current_user.id, do: " self-end", else: ""}
+        >
+          <p class={"text-gray-400 text-sm" <> if message.user_id == @current_user.id, do: " text-end ml-auto", else: ""}>
+            <%= message.user_email %>
+          </p>
+          <div class={"flex items-end justify-end" <> if message.user_id == @current_user.id, do: " flex-row-reverse", else: " flex-row"}>
+            <div class="flex flex-col">
+
+              <p class={"relative rounded-sm w-fit px-3 py-1 " <> if message.user_id == @current_user.id, do: " bg-blue-300 text-gray-800 ml-auto", else: " bg-gray-300"}>
+                <%= message.body %>
+              </p>
+            </div>
+            <p class={"text-sm whitespace-nowrap" <> if message.user_id == @current_user.id, do: " text-blue-300 mr-1 ", else: " text-gray-300 ml-1"}>
+              <%=
+                # Format the date to be more readable
+                #"#{Calendar.strftime(message.sent_at, "%m.%d.%Y %I:%M %p")}"
+                "#{Calendar.strftime(message.sent_at, "%I:%M %p")}"
+              %>
+            </p>
+          </div>
+        </button>
+      <% end %>
+    </div>
+    <form class="w-full flex flex-col" phx-submit="send_msg">
+      <input name="msg" class="w-full bg-white border-2 border-gray-400 rounded-lg p-3 mt-4" placeholder="Type a message..." />
+      <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Send
+      </button>
+    </form>
+  </div>
+</section>
+<script>
+  var objDiv = document.getElementById("chat-window");
+  objDiv.scrollTop = objDiv.scrollHeight;
+
+  // when height of objDiv changes, scroll to bottom with event listener
+  objDiv.addEventListener("DOMSubtreeModified", function() {
+    objDiv.scrollTop = objDiv.scrollHeight;
+  });
+</script>
