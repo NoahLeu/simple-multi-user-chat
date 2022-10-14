@@ -27,6 +27,14 @@ defmodule MultiChatWeb.Router do
     live "/", PageLive, :index
   end
 
+  scope "/api", MultiChatWeb do
+    pipe_through :api
+
+    # public endpoint for getting all messages
+    get "/messages", MessageController, :index
+  end
+
+
   # Other scopes may use custom stacks.
   # scope "/api", MultiChatWeb do
   #   pipe_through :api
