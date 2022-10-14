@@ -32,6 +32,7 @@ defmodule MultiChatWeb.Router do
 
     # public endpoint for getting all messages
     get "/messages", MessageController, :index
+    post "/messages", MessageController, :create
   end
 
 

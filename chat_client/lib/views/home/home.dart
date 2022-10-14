@@ -15,12 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Message>> messages;
+  late List<Message> messages;
 
   @override
   void initState() {
     super.initState();
-    messages = fetchMessages();
+    WidgetsBinding.instance.addPostFrameCallback((_) => updateMessages());
+
+    setState(() {
+      messages = [];
+    });
+  }
+
+  void updateMessages() async {
+    var new_messages = await fetchMessages();
+
+    setState(() {
+      messages = new_messages;
+      print("state set");
+    });
   }
 
   @override
@@ -54,33 +67,18 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: FutureBuilder<List<Message>>(
-              future: messages,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      /* return ListTile(
-                        title: Text(snapshot.data![index].body),
-                        subtitle: Text(snapshot.data![index].userEmail),
-                      );
-                      */
-                      return MessageDisplay(
-                        message: snapshot.data![index],
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
-          ),
+            child: ListView.builder(
+            itemCount: messages.length,
+            reverse: true,
+            itemBuilder: (context, index) {
+              return MessageDisplay(
+                message: messages[messages.length - index - 1],
+              );
+            },
+          )),
           Container(
             padding: const EdgeInsets.all(8),
-            child: const MessageForm(),
+            child: MessageForm(onMessageSent: updateMessages),
           ),
         ],
       ),
