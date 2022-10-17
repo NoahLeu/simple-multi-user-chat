@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:chat_client/models/send_message.api.dart';
 
 class MessageForm extends StatefulWidget {
-  const MessageForm({super.key});
+  const MessageForm({super.key, required this.onMessageSent});
+
+  final void Function() onMessageSent;
 
   @override
   State<MessageForm> createState() => _MessageFormState();
@@ -32,7 +34,7 @@ class _MessageFormState extends State<MessageForm> {
         ),
         const SizedBox(width: 8),
         TextButton(
-        onPressed: () { onPressed(messageController); },
+        onPressed: () { sendMessage(messageController: messageController, onMessageSent: widget.onMessageSent); },
         child: Container(
           height: 40,
           width: 150,
@@ -52,12 +54,19 @@ class _MessageFormState extends State<MessageForm> {
 }
 
 // define onPressed
-void onPressed(TextEditingController messageController) {
+void sendMessage({required TextEditingController messageController , required void Function() onMessageSent}) async {
   var messageText = messageController.text;
   print('text: $messageText');
 
   // send message to server
-  createMessage(messageText);
+  var create_res = createMessage(messageText);
+  if (create_res != null) {
+    print(create_res);
+    print('message sent');
 
-  messageController.clear();
+    messageController.clear();
+    
+    // refresh messages
+    onMessageSent();
+  }
 }

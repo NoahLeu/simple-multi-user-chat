@@ -7,20 +7,50 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat_client/login_page.dart';
 
+import 'package:phoenix_wings/phoenix_wings.dart';
+
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final socket = PhoenixSocket("ws://localhost:4000/socket/websocket");
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Message>> messages;
+  late List<Message> messages;
+  late PhoenixChannel _channel;
 
   @override
   void initState() {
     super.initState();
-    messages = fetchMessages();
+    WidgetsBinding.instance.addPostFrameCallback((_) => updateMessages());
+    _connectSocket();
+
+    setState(() {
+      messages = [];
+    });
+  }
+
+  void updateMessages() async {
+    var new_messages = await fetchMessages();
+
+    setState(() {
+      messages = new_messages;
+      print("state set");
+    });
+  }
+
+  Future<void> _connectSocket() async {
+    await widget.socket.connect();
+
+    _channel = widget.socket.channel("room:message_updates");
+    _channel.on("new_msg", (payload, ref, joinRef) {
+      print("new message");
+      updateMessages();
+    });
+
+    _channel.join();
   }
 
   @override
@@ -54,33 +84,18 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: FutureBuilder<List<Message>>(
-              future: messages,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(snapshot.data![index].body),
-                        subtitle: Text(snapshot.data![index].userEmail),
-                      );
-
-                      return MessageDisplay(
-                        message: snapshot.data![index],
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
-          ),
+              child: ListView.builder(
+            itemCount: messages.length,
+            reverse: true,
+            itemBuilder: (context, index) {
+              return MessageDisplay(
+                message: messages[messages.length - index - 1],
+              );
+            },
+          )),
           Container(
             padding: const EdgeInsets.all(8),
-            child: const MessageForm(),
+            child: MessageForm(onMessageSent: updateMessages),
           ),
         ],
       ),

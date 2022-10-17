@@ -46,7 +46,7 @@ defmodule MultiChatWeb.PageLive do
     {:noreply, assign(socket, messages: Enum.reject(socket.assigns.messages, &(&1.message_id == msg_id)))}
   end
 
-  def handle_info(%{event: "new_msg", body: _msg}, socket) do
+  def handle_info(%{body: _msg, event: "new_msg", }, socket) do
     {:noreply, assign(socket, messages: Messages.list_messages())}
   end
 

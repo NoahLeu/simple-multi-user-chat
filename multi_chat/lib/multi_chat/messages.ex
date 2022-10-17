@@ -30,6 +30,14 @@ defmodule MultiChat.Messages do
     |> MultiChat.Repo.insert!()
   end
 
+  def create_message(attrs \\ %{}) do
+    # generate unique id for message
+    attrs = Map.put(attrs, :message_id, Ecto.UUID.generate())
+    %MultiChat.Messages{}
+    |> MultiChat.Messages.changeset(attrs)
+    |> MultiChat.Repo.insert!()
+  end
+
   def delete_message(message) do
     MultiChat.Repo.delete(message)
   end
