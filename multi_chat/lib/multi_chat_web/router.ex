@@ -33,6 +33,9 @@ defmodule MultiChatWeb.Router do
     # public endpoint for getting all messages
     get "/messages", MessageController, :index
     post "/messages", MessageController, :create
+
+    # public endpoints for authenticating users
+    post "/login", LoginController, :login
   end
 
   # Other scopes may use custom stacks.

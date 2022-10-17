@@ -15,11 +15,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _controller = TextEditingController();
+  //late Future<Album> _futureAlbum;
+
   postData() async {
     var response =
         await http.post(Uri.parse('http://localhost:4000/users/log_in'), body: {
-      'email': 'foo',
-      'password': 'bar',
+      'email': CustomTextFormField.email,
+      'password': CustomTextFormField.password,
     });
     print(response.body);
   }
@@ -45,12 +48,14 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       CustomTextFormField.email(
                         label: 'Email',
+                        controller: _controller,
                         decorationBorderBool: false,
                       ),
                       ElevatedButton(
                         child: const Text('create something'),
                         onPressed: () {
                           setState(() {
+                            //_futureAlbum = createAlbum(_controller.text);
                             postData();
                           });
                         },
@@ -69,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
+                                  builder: (context) => HomePage()),
                             );
                           },
                           child: const Text('Login'),

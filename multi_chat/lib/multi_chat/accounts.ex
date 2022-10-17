@@ -350,9 +350,4 @@ defmodule MultiChat.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
-
-  # get all users
-  def get_all_users do
-    Repo.all(User)
-  end
 end

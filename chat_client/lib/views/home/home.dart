@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       messages = new_messages;
-      print("state set");
     });
   }
 
@@ -46,7 +45,9 @@ class _HomePageState extends State<HomePage> {
 
     _channel = widget.socket.channel("room:message_updates");
     _channel.on("new_msg", (payload, ref, joinRef) {
-      print("new message");
+      updateMessages();
+    });
+    _channel.on("delete_msg", (payload, ref, joinRef) {
       updateMessages();
     });
 

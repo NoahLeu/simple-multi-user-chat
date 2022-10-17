@@ -5,7 +5,6 @@ defmodule MultiChatWeb.MessageController do
   alias Phoenix.PubSub
 
   @topic "message_updates"
-  
 
   def index(conn, _params) do
     messages = Messages.list_messages()
