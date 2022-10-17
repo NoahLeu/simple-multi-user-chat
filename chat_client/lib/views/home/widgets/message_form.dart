@@ -56,16 +56,12 @@ class _MessageFormState extends State<MessageForm> {
 // define onPressed
 void sendMessage({required TextEditingController messageController , required void Function() onMessageSent}) async {
   var messageText = messageController.text;
-  print('text: $messageText');
 
   // send message to server
   var create_res = createMessage(messageText);
   if (create_res != null) {
-    print(create_res);
-    print('message sent');
-
     messageController.clear();
-    
+
     // refresh messages
     onMessageSent();
   }

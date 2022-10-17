@@ -4,8 +4,6 @@ defmodule MultiChatWeb.CustomSocket do
   channel "room:message_updates", MultiChatWeb.RoomChannel
 
   def connect(_params, socket) do
-    _params
-    |> IO.inspect(label: "params")
     {:ok, socket}
   end
 

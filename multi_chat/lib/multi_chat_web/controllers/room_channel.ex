@@ -15,10 +15,19 @@ defmodule MultiChatWeb.RoomChannel do
 
   @impl true
   def handle_info(msg, socket) do
-    Channel.broadcast!(socket, "new_msg", %{body: msg.body.body})
-
-    "hi"
+    msg
     |> IO.inspect(label: "handle_info")
+    case msg.event do
+      "new_msg" ->
+        Channel.broadcast!(socket, "new_msg", %{body: msg.body.body})
+      "delete_msg" ->
+        Channel.broadcast!(socket, "delete_msg", %{body: msg})
+      _ ->
+        IO.puts("Unknown event")
+    end
+
+    {:noreply, socket}
+
 
     {:noreply, socket}
   end
