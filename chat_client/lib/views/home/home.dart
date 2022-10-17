@@ -61,11 +61,11 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      /* return ListTile(
+                      return ListTile(
                         title: Text(snapshot.data![index].body),
                         subtitle: Text(snapshot.data![index].userEmail),
                       );
-                      */
+
                       return MessageDisplay(
                         message: snapshot.data![index],
                       );
