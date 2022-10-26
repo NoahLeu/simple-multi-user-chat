@@ -1,20 +1,20 @@
 
 
-<.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
+<.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user} class="h-full flex flex-col justify-center items-center grow -mt-24">
   <%= if @error_message do %>
     <div class="alert alert-danger">
       <p><%= @error_message %></p>
     </div>
   <% end %>
 
-  <div class="flex flex-col items-center">
-    <p class="font-bold text-xl mb-8 border-b-black border-b-2">Login-Page</p>
+  <div class="flex flex-col justify-center h-full items-center text-white font-bold">
+    <p class="font-bold text-4xl mb-8">Login</p>
     <div class="flex flex-col ">
       <%= label f, :email%>
-      <%= email_input f, :email, required: true, class: "rounded-md py-1 w-80 " %>
+      <%= email_input f, :email, required: true, class: "rounded-md py-1 w-80 text-black " %>
 
       <%= label f, :password, class: "mt-4"%>
-      <%= password_input f, :password, required: true, class: "rounded-md py-1 w-80" %>
+      <%= password_input f, :password, required: true, class: "rounded-md py-1 w-80 text-black" %>
     </div>
     <div class="flex w-56 mt-12 justify-end relative">
       <%= submit "Log in", class: "bg-blue-300 text-white border-black border-2 rounded-md w-40 text-center font-semibold mb-4" %>

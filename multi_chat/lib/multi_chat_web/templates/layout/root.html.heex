@@ -9,9 +9,9 @@
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
-  <body>
+  <body class="bg-gradient-to-b from-blue-400 to-green-400 min-h-screen flex flex-col">
     <header>
-      <section class="w-full bg-blue-400 text-white">
+      <section class="w-full text-white">
         <nav class="flex flex-row items-center p-4 font-bold">
           <%= render "_user_menu.html", assigns %>
         </nav>
