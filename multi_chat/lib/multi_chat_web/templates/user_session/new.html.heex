@@ -11,15 +11,15 @@
     <p class="font-bold text-4xl mb-8">Login</p>
     <div class="flex flex-col ">
       <%= label f, :email%>
-      <%= email_input f, :email, required: true, class: "rounded-md py-1 w-80 text-black " %>
+      <%= email_input f, :email, required: true, class: "rounded-md py-1 w-80 text-black border-none" %>
 
       <%= label f, :password, class: "mt-4"%>
-      <%= password_input f, :password, required: true, class: "rounded-md py-1 w-80 text-black" %>
+      <%= password_input f, :password, required: true, class: "rounded-md py-1 w-80 text-black border-none" %>
     </div>
     <div class="flex w-56 mt-12 justify-end relative">
-      <%= submit "Log in", class: "bg-blue-300 text-white border-black border-2 rounded-md w-40 text-center font-semibold mb-4" %>
+      <%= submit "Log in", class: "bg-blue-300 text-white border-blue-400 border rounded-md w-40 text-center font-semibold mb-4 py-2" %>
       <%= label f, :remember_me, "Keep me logged in for 60 days", class: " ml-4 text-xs" %>
-      <%= checkbox f, :remember_me, class: "self-center ml-2"%>
+      <%= checkbox f, :remember_me, class: "self-center ml-2 border-none"%>
     </div>
     <p class="mt-4 relative text-sm">
       <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
